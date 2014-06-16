@@ -1,3 +1,4 @@
+**4545454545**
 CREATE TABLE coop_org_unit 
 (
 ou_recno				serial,
