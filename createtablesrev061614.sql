@@ -96,7 +96,7 @@ CONSTRAINT coop_report_type_pk PRIMARY KEY(report_type_code)
 
 CREATE TABLE coop_report 
 (
-report_num 				varchar(5),
+report_num 				serial,
 report_type_code			varchar(5) REFERENCES coop_report_type (report_type_code), 
 report_dtl 				text, 
 ou_recno			 	integer REFERENCES coop_org_unit (ou_recno),  
@@ -167,18 +167,15 @@ CONSTRAINT coop_officer_pk PRIMARY KEY(mem_no)
 
 CREATE TABLE coop_org_plan
 (
-ou_plan_no				varchar(4) NOT NULL,
-report_num				varchar(5) REFERENCES coop_report (report_num),
+ou_plan_no				serial NOT NULL,
+report_num			integer REFERENCES coop_report (report_num),
 ou_recno				integer REFERENCES coop_org_unit (ou_recno),
-plan_start				date NOT NULL,
-plan_end				date,
-plan_dtl				text,		
 CONSTRAINT coop_org_plan_pk PRIMARY KEY(ou_plan_no)
 );
 
 CREATE TABLE coop_pros_report 
 (
-report_num 				varchar(5) REFERENCES coop_report (report_num),
+report_num 				integer REFERENCES coop_report (report_num),
 prospect_no 				integer REFERENCES coop_prospect (prospect_no),
 pros_rep_recno				serial NOT NULL,
 CONSTRAINT coop_pros_report_pk PRIMARY KEY(pros_rep_recno)
@@ -197,7 +194,7 @@ CONSTRAINT coop_pros_repver_pk PRIMARY KEY(rep_ver_logno)
 CREATE TABLE coop_rep_act
 (
 rep_act_recno				serial,
-report_num				varchar(5) REFERENCES coop_report (report_num),
+report_num				integer REFERENCES coop_report (report_num),
 act_recno				integer REFERENCES coop_activity (act_recno),
 CONSTRAINT coop_rep_act_pk PRIMARY KEY(rep_act_recno)
 );
@@ -478,7 +475,7 @@ CONSTRAINT coop_kinship_pk PRIMARY KEY(relative_id_no)
 
 CREATE TABLE coop_report_circ
 (
-report_num 				varchar(5) REFERENCES coop_report(report_num),
+report_num 				integer REFERENCES coop_report(report_num),
 report_circ_recno			varchar(3) NOT NULL, 
 to_ou_recno			 	integer REFERENCES coop_org_unit (ou_recno),  
 CONSTRAINT coop_report_circ_pk PRIMARY KEY(report_circ_recno)
