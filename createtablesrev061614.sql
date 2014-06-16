@@ -1,4 +1,4 @@
-**4545454545**
+
 CREATE TABLE coop_org_unit 
 (
 ou_recno				serial,
@@ -35,6 +35,9 @@ board_reso_no		 		varchar(7),
 action_date				date, 
 applicant_stat_rem			text, 
 resident_since 				date,
+primary_contact_no varchar(12),
+education varchar(15),
+civil_status char(1),
 CONSTRAINT coop_applicant_pk PRIMARY KEY(applicant_no)
 );
 
