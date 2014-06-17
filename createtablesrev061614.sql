@@ -1,13 +1,12 @@
 
 CREATE TABLE coop_org_unit 
 (
-ou_recno				serial,
-ou_code 				varchar(20) NOT NULL, 
-ou_name 				varchar(50) NOT NULL, 
-managed_by				varchar(6),
-ou_date_start				date,
-ou_date_end				date,
-CONSTRAINT coop_org_unit_pk PRIMARY KEY(ou_recno)
+ou_code 				varchar(12) NOT NULL, 
+ou_name 				varchar(25) NOT NULL, 
+managed_by				varchar(12),
+date_created				date,
+date_dissolved				date,
+CONSTRAINT coop_org_unit_pk PRIMARY KEY(ou_code)
 );
 
 CREATE TABLE coop_applicant 
@@ -25,7 +24,7 @@ region					varchar(50),
 province 				varchar(50), 
 contact_number 				varchar(12), 
 email					varchar(30), 
-ou_recno 				integer REFERENCES coop_org_unit (ou_recno), 
+ou_code 				varchar(12) REFERENCES coop_org_unit (ou_code), 
 nationality 				varchar(8) NOT NULL, 
 occupation 				varchar(20) NOT NULL, 
 application_date 			date NOT NULL, 
@@ -68,7 +67,7 @@ mem_date 				date NOT NULL,
 mem_status 				char(1) NOT NULL, 
 status_date				date, 
 mem_stat_rem				text,
-ou_recno				integer REFERENCES coop_org_unit (ou_recno),
+ou_code				varchar(12) REFERENCES coop_org_unit (ou_code),
 tax_id_no 				varchar(11), 
 nationality 				varchar(8), 
 zip_code 				varchar(4), 
@@ -99,7 +98,7 @@ CREATE TABLE coop_report
 report_num 				serial,
 report_type_code			varchar(5) REFERENCES coop_report_type (report_type_code), 
 report_dtl 				text, 
-ou_recno			 	integer REFERENCES coop_org_unit (ou_recno),  
+ou_code			 	varchar(12) REFERENCES coop_org_unit (ou_code),  
 report_date_from	 		date, 
 report_date_to	 			date,
 report_date_encoded			date NOT NULL,
@@ -119,7 +118,7 @@ street 					varchar(60),
 barangay 				varchar(50), 
 city_mun				varchar(50) NOT NULL, 
 contact_number 				varchar(12),
-ou_recno 				integer REFERENCES coop_org_unit (ou_recno), 
+ou_code 				varchar(12) REFERENCES coop_org_unit (ou_code), 
 length_of_stay 				boolean NOT NULL, 
 nationality 				varchar(8) NOT NULL, 
 occupation 				varchar(20), 
@@ -159,7 +158,7 @@ CREATE TABLE coop_officer
 (
 mem_no	 				varchar(10) NOT NULL,
 coop_position				varchar(10) NOT NULL,
-ou_recno				integer REFERENCES coop_org_unit (ou_recno),
+ou_code				varchar(12) REFERENCES coop_org_unit (ou_code),
 term_start				date NOT NULL,
 term_end				date,
 CONSTRAINT coop_officer_pk PRIMARY KEY(mem_no)
@@ -169,7 +168,7 @@ CREATE TABLE coop_org_plan
 (
 ou_plan_no				serial NOT NULL,
 report_num			integer REFERENCES coop_report (report_num),
-ou_recno				integer REFERENCES coop_org_unit (ou_recno),
+ou_code				varchar(12) REFERENCES coop_org_unit (ou_code),
 CONSTRAINT coop_org_plan_pk PRIMARY KEY(ou_plan_no)
 );
 
@@ -403,7 +402,7 @@ CONSTRAINT coop_ext_org_act_pk PRIMARY KEY(EXT_org_act_recno)
 CREATE TABLE coop_ou_act
 (
 ou_act_recno				varchar(3),
-ou_recno				integer REFERENCES coop_org_unit (ou_recno), 
+ou_code				varchar(12) REFERENCES coop_org_unit (ou_code), 
 act_recno 				integer REFERENCES coop_activity (act_recno),
 CONSTRAINT coop_ou_act_pk PRIMARY KEY(ou_act_recno)
 );
@@ -477,7 +476,7 @@ CREATE TABLE coop_report_circ
 (
 report_num 				integer REFERENCES coop_report(report_num),
 report_circ_recno			varchar(3) NOT NULL, 
-to_ou_recno			 	integer REFERENCES coop_org_unit (ou_recno),  
+to_ou_code			 	integer REFERENCES coop_org_unit (ou_code),  
 CONSTRAINT coop_report_circ_pk PRIMARY KEY(report_circ_recno)
 );
 
