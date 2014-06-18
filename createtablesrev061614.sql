@@ -1,5 +1,4 @@
 
-
 CREATE TABLE coop_org_unit 
 (
 ou_code 				varchar(12) NOT NULL, 
@@ -139,12 +138,28 @@ act_desc				text NOT NULL,
 CONSTRAINT coop_activity_type_pk PRIMARY KEY(act_type_code)
 );
 
+-- Table: coop_member_applicant
+
+-- DROP TABLE coop_member_applicant;
+
 CREATE TABLE coop_member_applicant
 (
-mem_no					varchar(10) NOT NULL REFERENCES coop_member (mem_no),
-applicant_no				integer NOT NULL REFERENCES coop_applicant (applicant_no),
-CONSTRAINT coop_member_pk PRIMARY KEY (mem_no)
+  mem_no character varying(10) NOT NULL,
+  applicant_no integer NOT NULL,
+  CONSTRAINT coop_member_applicant_pkey PRIMARY KEY (mem_no, applicant_no),
+  CONSTRAINT coop_member_applicant_applicant_no_fkey FOREIGN KEY (applicant_no)
+      REFERENCES coop_applicant (applicant_no) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT coop_member_applicant_mem_no_fkey FOREIGN KEY (mem_no)
+      REFERENCES coop_member (mem_no) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION
+)
+WITH (
+  OIDS=FALSE
 );
+ALTER TABLE coop_member_applicant
+  OWNER TO postgres;
+
 
 CREATE TABLE coop_activity
 (
@@ -191,7 +206,7 @@ rep_ver_logno				serial NOT NULL,
 pros_rep_num				integer REFERENCES coop_pros_report (pros_rep_num),
 ver_date				date NOT NULL,
 report_dtl				text,
-user					varchar(10) NOT NULL,
+user_num				varchar(10) NOT NULL,
 CONSTRAINT coop_pros_repver_pk PRIMARY KEY(rep_ver_logno)
 );
 
@@ -212,7 +227,7 @@ CONSTRAINT coop_pers_sector_pk PRIMARY KEY(pers_sec_code)
 
 CREATE TABLE coop_personality 
 (
-personality_recno	 		serial, 
+personality_num	 		serial, 
 pers_sec_code 				integer REFERENCES coop_pers_sector (pers_sec_code),
 last_name 				varchar(20) NOT NULL, 
 first_name 				varchar(25) NOT NULL, 
@@ -236,7 +251,7 @@ religion 				varchar(14),
 p_prefix				varchar(8), 
 suffix 					varchar(5), 
 person_status				boolean,
-CONSTRAINT coop_personality_pk PRIMARY KEY(personality_recno) 
+CONSTRAINT coop_personality_pk PRIMARY KEY(personality_num) 
 );
 
 CREATE TABLE coop_skill
@@ -398,10 +413,10 @@ CONSTRAINT coop_ext_org_pk PRIMARY KEY(ext_org_code)
 
 CREATE TABLE coop_ext_org_act
 (
-ext_org_act_num			serial,
+ext_org_act_num				serial,
 ext_org_code 				integer REFERENCES coop_ext_org (ext_org_code), 
 act_num 				integer REFERENCES coop_activity (act_num),
-CONSTRAINT coop_ext_org_act_pk PRIMARY KEY(EXT_org_act_num)
+CONSTRAINT coop_ext_org_act_pk PRIMARY KEY(ext_org_act_num)
 );
 
 CREATE TABLE coop_ou_act
@@ -415,7 +430,7 @@ CONSTRAINT coop_ou_act_pk PRIMARY KEY(ou_act_num)
 CREATE TABLE coop_pers_act
 (
 pers_act_num				serial,
-personality_recno 			integer REFERENCES coop_personality (personality_recno), 
+personality_num 			integer REFERENCES coop_personality (personality_num), 
 act_num 				integer REFERENCES coop_activity (act_num),
 CONSTRAINT coop_pers_act_pk PRIMARY KEY(pers_act_num)
 );
@@ -431,7 +446,7 @@ CONSTRAINT coop_pers_ext_org_pk PRIMARY KEY(pers_ext_org_num)
 
 CREATE TABLE coop_mem_skill
 (
-mem_no 				varchar(10) REFERENCES coop_member (mem_no), 
+mem_no 					varchar(10) REFERENCES coop_member (mem_no), 
 sk_prof_code 				integer REFERENCES coop_skill (sk_prof_code),
 
 CONSTRAINT coop_mem_skill_pk PRIMARY KEY(sk_prof_code)
@@ -504,7 +519,7 @@ CONSTRAINT coop_pros_criteria_main_pk PRIMARY KEY(criteria_main_num)
 
 CREATE TABLE coop_pros_criteria_sub
 (
-criteria_main_num			integer REFERENCES coop_pros_criteria_main(criteria_main_recno), 
+criteria_main_num			integer REFERENCES coop_pros_criteria_main(criteria_main_num), 
 sub_criteria_no			 	integer,
 sub_criteria_dtl			text,	
 sub_criteria_num			serial NOT NULL,
@@ -514,12 +529,12 @@ CONSTRAINT coop_pros_criteria_sub_pk PRIMARY KEY(sub_criteria_num)
 CREATE TABLE coop_pros_rating_main
 (
 pros_rep_num 				integer REFERENCES coop_pros_report(pros_rep_num),
-criteria_main_num			integer REFERENCES coop_pros_criteria_main(criteria_main_recno),
+criteria_main_num			integer REFERENCES coop_pros_criteria_main(criteria_main_num),
 criteria_rating				integer,
 pros_rating_main_num			serial NOT NULL,  
 CONSTRAINT coop_pros_rating_main_pk PRIMARY KEY(pros_rating_main_num)
 );
-app_subj_rating
+
 CREATE TABLE coop_pros_rating_sub
 (
 pros_rep_num 				integer REFERENCES coop_pros_report(pros_rep_num),
