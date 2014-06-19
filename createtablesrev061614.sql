@@ -117,6 +117,24 @@ WITH (
 ALTER TABLE coop_member
   OWNER TO postgres;
 
+-- Table: coop_report_type
+
+-- DROP TABLE coop_report_type;
+
+CREATE TABLE coop_report_type
+(
+  report_type_code serial NOT NULL,
+  report_type character varying(25) NOT NULL,
+  report_desc text NOT NULL,
+  CONSTRAINT coop_report_type_pk PRIMARY KEY (report_type_code)
+)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE coop_report_type
+  OWNER TO postgres;
+
+
 -- Table: coop_report
 
 -- DROP TABLE coop_report;
