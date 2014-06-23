@@ -1,3 +1,6 @@
+DROP SCHEMA public CASCADE;
+CREATE SCHEMA public;
+
 -- Table: coop_org_unit
 
 -- DROP TABLE coop_org_unit;
@@ -9,7 +12,7 @@ CREATE TABLE coop_org_unit
   managed_by 		character varying(12),
   date_created 		date,
   date_dissolved 	date,
-  CONSTRAINT coop_org_unit_pk PRIMARY KEY (ou_code)
+  CONSTRAINT coop_org_unit_pk PRIMARY KEY (ou_code),CONSTRAINT coop_org_unit_ou_code_fkey FOREIGN KEY (ou_code) REFERENCES coop_org_unit (ou_code)
 )
 WITH (
   OIDS=FALSE
@@ -353,12 +356,15 @@ ALTER TABLE coop_pros_report
 
 CREATE TABLE coop_pros_repver
 (
-  rep_ver_logno 		serial NOT NULL,
-  pros_rep_num 			integer,
-  ver_date 			date NOT NULL,
-  report_dtl 			text,
-  user_num 			character varying(10) NOT NULL,
+  rep_ver_logno serial NOT NULL,
+  pros_rep_num integer,
+  ver_date date NOT NULL,
+  report_dtl text,
+  user_num character varying(10) NOT NULL,
   CONSTRAINT coop_pros_repver_pk PRIMARY KEY (rep_ver_logno),
+  CONSTRAINT coop_pros_repver FOREIGN KEY (user_num)
+      REFERENCES coop_member (mem_no) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION,
   CONSTRAINT coop_pros_repver_pros_rep_num_fkey FOREIGN KEY (pros_rep_num)
       REFERENCES coop_pros_report (pros_rep_num) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE NO ACTION
